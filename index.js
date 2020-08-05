@@ -7,9 +7,8 @@ const server = express();
 server.use(express.json());
 
 
-
 // request handler
-server.get('/', (req, res) => {
+server.get('/hello', (req, res) => {
     res.send("Server is up and running!");
 });
 
