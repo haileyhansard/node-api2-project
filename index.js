@@ -4,8 +4,7 @@ const server = express();
 
 server.use(express.json());
 
-//postsRouter to bring in the posts-router.js created
-const postsRouter = require('./posts/posts-router');
+const postsRouter = require('./posts/posts-router.js');
 
 // request handler
 server.get('/', (req, res) => {
@@ -13,7 +12,7 @@ server.get('/', (req, res) => {
 });
 
 //server.use routes created in postsRouter
-server.use('/api/posts', postsRouter);
+server.use("/api/posts", postsRouter)
 
 const port = 8000;
 server.listen(port, () => {
