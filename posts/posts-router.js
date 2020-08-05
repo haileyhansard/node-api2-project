@@ -1,6 +1,7 @@
 const express = require('express');
 
-const Posts = require('../data/db.js')
+const Posts = require('../data/db.js');
+const { remove } = require('../data/db.js');
 
 const router = express.Router();
 
@@ -125,6 +126,21 @@ router.put('/:id', (req, res) => {
 
 //DELETE	/api/posts/:id	
 //Removes the post with the specified id and returns the deleted post object. You may need to make additional calls to the database in order to satisfy this requirement.
+router.delete('/:id', (req, res) => {
+    Posts.remove(req.params.id)
+    .then(allDeletedPosts => {
+        console.log(allDeletedPosts)
+        if(allDeletedPosts > 0) {
+            res.status(200).json({ message: "The post was successfully deleted." })
+        } else {
+            res.status(404).json({ message: "The post with the specified ID does not exist."})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ error: "The post could not be removed" })
+    })
+})
 
 module.exports = router;
 
