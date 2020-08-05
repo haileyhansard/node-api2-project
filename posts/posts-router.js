@@ -87,13 +87,41 @@ router.post('/', (req, res) => {
             res.status(500).json({ error: "There was an error while saving the post to the database" })
         }
     })
-})
+});
 
 //POST	/api/posts/:id/comments	
 //Creates a comment for the post with the specified id using information sent inside of the request body.
+router.post('/:id/comments', (req, res) => {
+    Posts.insert()
+});
 
 //PUT	/api/posts/:id	
 //Updates the post with the specified id using data from the request body. Returns the modified document, NOT the original.
+router.put('/:id', (req, res) => {
+    if(!req.body.title || !req.body.contents) {
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+    } else {
+        Posts.update(req.params.id, req.body)
+        .then(allUpdatedPosts => {
+            console.log(allUpdatedPosts)
+            Posts.findById(req.params.id)
+            .then(updatedPost => {
+                if(allUpdatedPosts > 0) {
+                    res.status(200).json(updatedPost)
+                } else {
+                    res.status(404).json({ message: "The post with the specified ID does not exist." })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ error: "The post information could not be modified." })
+        })
+    }
+});
 
 //DELETE	/api/posts/:id	
 //Removes the post with the specified id and returns the deleted post object. You may need to make additional calls to the database in order to satisfy this requirement.
